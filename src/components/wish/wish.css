@@ -1,0 +1,462 @@
+/* ---------- Wish link experience ---------- */
+
+.wish-root {
+  position: relative;
+  height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+  color: #fff;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.wish-root[data-theme="birthday"] {
+  --box: #ec4899;
+  --box-lid: #f472b6;
+  --ribbon: #fde047;
+  --accent: #fde68a;
+  --accent-2: #f9a8d4;
+  --name-gradient: linear-gradient(100deg, #fde68a 0%, #f9a8d4 35%, #ffffff 50%, #c4b5fd 65%, #fde68a 100%);
+  background: radial-gradient(120% 80% at 50% 0%, #4c1d95 0%, #2e1065 40%, #12082b 100%);
+}
+
+.wish-root[data-theme="diwali"] {
+  --box: #b91c1c;
+  --box-lid: #dc2626;
+  --ribbon: #fbbf24;
+  --accent: #fcd34d;
+  --accent-2: #fb923c;
+  --name-gradient: linear-gradient(100deg, #fcd34d 0%, #fb923c 35%, #fff7ed 50%, #fbbf24 65%, #fcd34d 100%);
+  background:
+    radial-gradient(90% 45% at 50% 105%, rgba(234, 88, 12, 0.55) 0%, transparent 70%),
+    radial-gradient(120% 90% at 50% 0%, #3b0a45 0%, #1a0626 55%, #0b0414 100%);
+}
+
+/* Scene + parallax layers */
+.wish-scene {
+  position: absolute;
+  inset: 0;
+  transition: filter 1.2s ease, transform 1.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.wish-root:not([data-stage="open"]) .wish-scene {
+  filter: brightness(0.42) saturate(0.85);
+  transform: scale(1.06);
+}
+
+.layer {
+  position: absolute;
+  inset: -6%;
+  pointer-events: none;
+  transform: translate3d(calc(var(--px, 0) * var(--d, 0) * -28px), calc(var(--py, 0) * var(--d, 0) * -20px), 0);
+  will-change: transform;
+}
+
+/* Elements that rise into place when the gift opens */
+.rise {
+  transition: transform 1.8s cubic-bezier(0.18, 0.9, 0.25, 1) var(--rise-delay, 0s), opacity 1s ease var(--rise-delay, 0s);
+}
+.wish-root:not([data-stage="open"]) .rise {
+  transform: translateY(70vh);
+  opacity: 0;
+}
+
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+.bokeh {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--c) 0%, transparent 68%);
+  animation: drift 14s ease-in-out infinite alternate;
+}
+
+.sparkle {
+  position: absolute;
+  animation: sparkle 2.6s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px rgba(255, 230, 150, 0.8));
+}
+
+.hang {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 7%;
+}
+.hang-string {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.flag {
+  position: absolute;
+  width: 5.5vmin;
+  height: 7vmin;
+  margin-left: -2.75vmin;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: 50% 0;
+  animation: flutter 3s ease-in-out infinite;
+}
+
+.balloon {
+  position: absolute;
+}
+.balloon-inner {
+  animation: floaty 6s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+.balloon svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.25));
+}
+
+.bottom-center {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.cake {
+  width: min(44vmin, 250px);
+}
+.cake svg,
+.rangoli svg,
+.diya svg,
+.lantern svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.flame {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: flicker 0.18s ease-in-out infinite alternate;
+}
+.candle-glow,
+.diya-glow {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: glow 1.6s ease-in-out infinite alternate;
+}
+
+.lantern {
+  position: absolute;
+  top: 0;
+  transform-origin: 50% 0;
+  animation: swing 4s ease-in-out infinite alternate;
+}
+.lantern-cord {
+  width: 1px;
+  margin: 0 auto;
+  background: rgba(255, 220, 180, 0.5);
+}
+.lantern svg {
+  filter: drop-shadow(0 0 14px rgba(255, 140, 40, 0.55));
+}
+
+.bulb {
+  position: absolute;
+  width: 1.6vmin;
+  height: 2.3vmin;
+  margin-left: -0.8vmin;
+  margin-top: -0.3vmin;
+  border-radius: 50% 50% 45% 45%;
+  background: var(--c);
+  box-shadow: 0 0 12px 3px var(--c);
+  animation: bulb 1.8s ease-in-out infinite;
+}
+
+.rangoli {
+  width: min(78vmin, 460px);
+}
+.rangoli svg {
+  animation: spin 80s linear infinite;
+  opacity: 0.9;
+}
+
+.diyas {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: 9%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-end;
+}
+.diya {
+  width: min(13vmin, 86px);
+}
+.diya-center {
+  width: min(17vmin, 110px);
+}
+
+/* Gift (closed state) */
+.gift-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  transition: opacity 0.5s ease 0.55s;
+}
+.wish-root[data-stage="opening"] .gift-stage {
+  opacity: 0;
+}
+
+.gift-teaser {
+  font-family: var(--font-baloo), system-ui, sans-serif;
+  font-size: clamp(1.35rem, 5.6vmin, 2.2rem);
+  font-weight: 600;
+  line-height: 1.25;
+  max-width: 22ch;
+  animation: fadeUp 0.9s ease both;
+}
+.gift-teaser span {
+  color: var(--accent);
+}
+
+.gift-button {
+  position: relative;
+  width: min(54vmin, 270px);
+  aspect-ratio: 1;
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  animation: wiggle 2.6s ease-in-out infinite;
+}
+.gift-button::before {
+  content: "";
+  position: absolute;
+  inset: -12%;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 45%, transparent) 0%, transparent 65%);
+  animation: pulse 2.2s ease-in-out infinite;
+}
+.gift-button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 8px;
+  border-radius: 1rem;
+}
+.gift-svg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.gift-lid,
+.gift-body,
+.gift-rays {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+.gift-rays {
+  opacity: 0;
+  transform: scaleY(0.2);
+}
+.wish-root[data-stage="opening"] .gift-button {
+  animation: none;
+}
+.wish-root[data-stage="opening"] .gift-lid {
+  transform: translate(18px, -150px) rotate(28deg);
+  opacity: 0;
+  transition: transform 0.75s cubic-bezier(0.3, 1.3, 0.5, 1), opacity 0.5s ease 0.3s;
+}
+.wish-root[data-stage="opening"] .gift-body {
+  animation: squash 0.5s ease;
+}
+.wish-root[data-stage="opening"] .gift-rays {
+  opacity: 1;
+  transform: scaleY(1);
+  transition: transform 0.6s ease 0.15s, opacity 0.3s ease 0.15s;
+}
+
+.gift-hint {
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  opacity: 0.8;
+  animation: breathe 1.8s ease-in-out infinite;
+}
+
+.flash {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 244, 214, 0.95) 0%, rgba(255, 244, 214, 0.4) 35%, transparent 70%);
+}
+.wish-root[data-stage="opening"] .flash {
+  animation: flash 1.1s ease 0.45s both;
+}
+
+.confetti-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 6;
+  pointer-events: none;
+}
+
+/* Revealed content */
+.wish-content {
+  position: relative;
+  z-index: 3;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 3.5rem 1.25rem 30vh;
+  text-align: center;
+}
+
+.wish-headline {
+  font-family: var(--font-dancing), cursive;
+  font-size: clamp(2rem, 8.5vmin, 3.8rem);
+  color: var(--accent);
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
+  animation: fadeUp 0.9s ease 0.15s both;
+}
+
+.wish-name {
+  font-family: var(--font-baloo), system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.6rem, 13vmin, 6rem);
+  line-height: 1.05;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  filter: drop-shadow(0 4px 22px rgba(0, 0, 0, 0.4));
+}
+.wish-name span {
+  display: inline-block;
+  background: var(--name-gradient);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation:
+    letterIn 0.75s cubic-bezier(0.2, 0.9, 0.3, 1.35) calc(0.45s + var(--i) * 75ms) both,
+    shine 5s linear calc(1.5s + var(--i) * 75ms) infinite;
+}
+
+.wish-card {
+  max-width: 28rem;
+  padding: 1.1rem 1.3rem;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  font-size: clamp(0.98rem, 3.6vmin, 1.12rem);
+  line-height: 1.6;
+  animation: fadeUp 0.9s ease calc(0.9s + var(--n) * 75ms) both;
+}
+.wish-from {
+  margin-top: 0.6rem;
+  font-family: var(--font-dancing), cursive;
+  font-size: 1.35em;
+  color: var(--accent-2);
+}
+
+.wish-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  animation: fadeUp 0.8s ease calc(1.4s + var(--n) * 75ms) both;
+}
+.pill {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.6rem 1.1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+.pill:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+.pill:active {
+  transform: scale(0.96);
+}
+.pill-primary {
+  background: var(--accent);
+  color: #2a0a2e;
+  border-color: transparent;
+}
+.pill-primary:hover {
+  background: color-mix(in srgb, var(--accent) 85%, #fff);
+}
+.pill:disabled {
+  cursor: default;
+  opacity: 0.85;
+}
+.make-own {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  animation: fadeUp 0.8s ease calc(1.8s + var(--n) * 75ms) both;
+}
+
+/* Keyframes */
+@keyframes twinkle { 0%, 100% { opacity: 0.25; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.15); } }
+@keyframes drift { from { transform: translate(0, 0); } to { transform: translate(4vmin, -3vmin); } }
+@keyframes sparkle { 0%, 100% { opacity: 0; transform: scale(0.4) rotate(0deg); } 50% { opacity: 1; transform: scale(1) rotate(45deg); } }
+@keyframes flutter { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+@keyframes floaty { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-2.2vmin) rotate(3deg); } }
+@keyframes flicker { from { transform: scale(1, 1) rotate(-2deg); } to { transform: scale(0.9, 1.1) rotate(2deg); } }
+@keyframes glow { from { opacity: 0.15; transform: scale(0.9); } to { opacity: 0.35; transform: scale(1.1); } }
+@keyframes swing { from { transform: rotate(-4deg); } to { transform: rotate(4deg); } }
+@keyframes bulb { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes wiggle {
+  0%, 70%, 100% { transform: rotate(0) scale(1); }
+  75% { transform: rotate(-5deg) scale(1.03); }
+  80% { transform: rotate(5deg) scale(1.03); }
+  85% { transform: rotate(-3deg); }
+  90% { transform: rotate(2deg); }
+}
+@keyframes pulse { 0%, 100% { opacity: 0.6; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1.05); } }
+@keyframes squash { 0% { transform: scale(1, 1); } 40% { transform: scale(1.08, 0.9); } 100% { transform: scale(1, 1); } }
+@keyframes breathe { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+@keyframes flash { 0% { opacity: 0; } 35% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes letterIn {
+  from { opacity: 0; transform: translateY(0.6em) scale(0.6) rotate(-8deg); }
+  to { opacity: 1; transform: translateY(0) scale(1) rotate(0); }
+}
+@keyframes shine { from { background-position: 100% 0; } to { background-position: -200% 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .wish-root *,
+  .wish-root *::before,
+  .wish-root *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.2s !important;
+  }
+}
